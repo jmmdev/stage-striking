@@ -51,16 +51,13 @@ body {
     height: 100%;
 }
 
-.starter img{
-    box-shadow: 0 0 0 2px #00cc33;
+.starter {
+    border: 2px solid #00cc33;
 }
 
 .cp {
     display: none;
-}
-
-.cp img {
-    box-shadow: 0 0 0 2px #ffbb00;
+    border: 2px solid #ffbb00;
 }
 
 .controls-container {
