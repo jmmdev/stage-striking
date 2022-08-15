@@ -1,8 +1,8 @@
 function initialize() {
-    setBodySize();
+    resizeWindow();
 
     window.addEventListener('resize', () => {
-        setBodySize();
+        resizeWindow();
     })
 
     document.cookie = 'starters=1,2,3,4,5';
@@ -77,7 +77,7 @@ function initialize() {
     })
 }
 
-function setBodySize() {
+function resizeWindow() {
     document.body.style.width = window.innerWidth + 'px';
     document.body.style.height = window.innerHeight + 'px';
 }
