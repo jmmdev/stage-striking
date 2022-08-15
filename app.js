@@ -1,4 +1,10 @@
 function initialize() {
+    setBodySize();
+
+    window.addEventListener('resize', () => {
+        setBodySize();
+    })
+
     document.cookie = 'starters=1,2,3,4,5';
     document.cookie = 'cp=6,7,8,9';
 
@@ -69,6 +75,11 @@ function initialize() {
     cancelButton.addEventListener('click', () => {
         closeEditMenu();
     })
+}
+
+function setBodySize() {
+    document.body.style.width = window.innerWidth + 'px';
+    document.body.style.height = window.innerHeight + 'px';
 }
 
 function banStage(element) {
