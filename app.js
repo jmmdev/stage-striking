@@ -78,8 +78,9 @@ function initialize() {
 }
 
 function resizeWindow() {
-    document.body.style.width = window.innerWidth + 'px';
-    document.body.style.height = window.innerHeight + 'px';
+    var appContainer = document.getElementById('app-container');
+    appContainer.style.width = window.innerWidth + 'px';
+    appContainer.style.height = window.innerHeight + 'px';
 }
 
 function banStage(element) {
