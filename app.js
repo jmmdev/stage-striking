@@ -225,7 +225,7 @@ function setStages() {
 
     var starters = getCookie('starters');
 
-    if(starters === ""){
+    if(starters === null){
         document.cookie = 'starters=0,1,2,3,4';
         starters = getCookie('starters');
     }
@@ -246,7 +246,7 @@ function setStages() {
 
     var cp = getCookie('cp');
 
-    if(cp === ""){
+    if(cp === null){
         document.cookie = 'cp=5,6,7,8';
         cp = getCookie('cp');
     }
@@ -267,9 +267,11 @@ function setStages() {
 
     var disabled = getCookie('disabled');
 
-    if(disabled === ""){
+    if(disabled === null){
         document.cookie = 'disabled=9,10';
     }
+
+    console.log(starters, cp, disabled);
 
     var createdStages = document.getElementsByClassName('stage'); 
 
@@ -320,5 +322,5 @@ function getCookie(cname) {
         return c.substring(name.length, c.length);
       }
     }
-    return "";
+    return null;
   }

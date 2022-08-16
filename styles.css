@@ -162,7 +162,7 @@ body {
 
 .stage-edit-buttons {
     width: 28%;
-    height: 88px;
+    height: 20%;
     position: absolute;
     left: 98.75%;
     top: 100%;
@@ -171,6 +171,7 @@ body {
 
 .menu-button {
     width: 100%;
+    min-height: 32px;
     height: calc(50% - 8px);
     border-radius: 8px;
     font-family: 'Open Sans', sans-serif;
