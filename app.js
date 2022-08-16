@@ -1,12 +1,17 @@
 function initialize() {
     resizeWindow();
+
     populateStages();
+
+    setStages();
+
+    setTimeout(() => {
+        setRadioButtons();    
+    }, 200);
 
     window.addEventListener('resize', () => {
         resizeWindow();
     })
-
-    setStages();
 
     var cpToggle = document.getElementById('cp-toggle');
     cpToggle.addEventListener('click', () => {
@@ -76,6 +81,7 @@ function saveChanges() {
     }).then(stages_data => {
         var starters = '';
         var cp = '';
+        var disabled = '';
 
         for(let data of stages_data) {
             var value = document.querySelector('input[name="'+ data.index +'"]:checked').value;
@@ -87,10 +93,15 @@ function saveChanges() {
             if(value === 'cp') {
                 cp += data.index + ',';
             }
+
+            if(value === 'disabled') {
+                disabled += data.index + ',';
+            }
         }
 
         document.cookie = 'starters=' + starters;
         document.cookie = 'cp=' + cp;
+        document.cookie = 'disabled=' + disabled;
 
         setStages();
         closeEditMenu();
@@ -98,22 +109,33 @@ function saveChanges() {
 }
 
 function toggleCps(element){
-    var stages = document.getElementsByClassName('cp');
-
     var className = element.className;
 
     if (className.includes('selected')) {
         element.className = className.replace(' selected', '')
         element.innerText = 'Show counterpicks';
 
-        for(let s of stages){
-            s.style.display = 'none';
-        }
+        viewCps(false);
     }
     else {
         element.className = className + ' selected';
         element.innerText = 'Hide counterpicks';
 
+        viewCps(true);
+       
+    }
+}
+
+function viewCps(boolean) {
+    var stages = document.getElementsByClassName('cp');
+
+    if(!boolean) {
+        for(let s of stages){
+            s.style.display = 'none';
+        }
+    }
+
+    if(boolean) {
         for(let s of stages){
             s.style.display = 'flex';
         }
@@ -148,6 +170,7 @@ function populateStages() {
 
                         var radio1 = document.createElement('input');
                         radio1.type = 'radio';
+                        radio1.id = 'starter' + s.index;
                         radio1.name = s.index;
                         radio1.value = 'starter';
                         radio1.className = 'state radio-starter';
@@ -164,6 +187,7 @@ function populateStages() {
 
                         var radio2 = document.createElement('input');
                         radio2.type = 'radio';
+                        radio2.id = 'cp' + s.index;
                         radio2.name = s.index;
                         radio2.value = 'cp';
                         radio2.className = 'state radio-cp';
@@ -180,6 +204,7 @@ function populateStages() {
 
                         var radio3 = document.createElement('input');
                         radio3.type = 'radio';
+                        radio3.id = 'disabled' + s.index;
                         radio3.name = s.index;
                         radio3.value = 'disabled';
                         radio3.className = 'state radio-disabled';
@@ -240,12 +265,45 @@ function setStages() {
         stagesContainer.appendChild(stageDiv);
     }
 
+    var disabled = getCookie('disabled');
+
+    if(disabled === ""){
+        document.cookie = 'disabled=9,10';
+    }
+
     var createdStages = document.getElementsByClassName('stage'); 
 
     for(let s of createdStages) {
         s.addEventListener('click', () => {
             banStage(s);
         })
+    }
+
+    var cpToggle = document.getElementById('cp-toggle');
+    
+    viewCps(cpToggle.className.includes('selected'));
+}
+
+function setRadioButtons() {
+    var starters = getCookie('starters');
+    var starterList = starters.split(',').filter(element => element);
+
+    var cp = getCookie('cp');
+    var cpList = cp.split(',').filter(element => element);
+
+    var disabled = getCookie('disabled');
+    var disabledList = disabled.split(',').filter(element => element);
+
+    for(let s of starterList) {
+        document.getElementById('starter'+s).checked = true;
+    }
+
+    for (let c of cpList) {
+        document.getElementById('cp'+c).checked = true;
+    }
+
+    for (let d of disabledList) {
+        document.getElementById('disabled'+d).checked = true;
     }
 }
 

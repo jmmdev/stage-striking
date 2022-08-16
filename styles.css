@@ -154,26 +154,25 @@ body {
 
 .stage-settings {
     width: 97.5%;
-    height: 90%;
+    height: 100%;
     display: grid;
     grid-template-rows: repeat(4, 1fr);
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 8px;
-    margin: 1.25% 0 -2.5% 0;
 }
 
 .stage-edit-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    width: 100%;
-    min-height: 32px;
-    height: 10%;
+    width: 28%;
+    height: 88px;
+    position: absolute;
+    left: 98.75%;
+    top: 100%;
+    transform: translate(-100%, -100%);
 }
 
 .menu-button {
-    width: 20%;
-    height: 100%;
+    width: 100%;
+    height: calc(50% - 8px);
     border-radius: 8px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
@@ -185,7 +184,7 @@ body {
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    margin-right: 2.5%;
+    margin-bottom: 8px;
 }
 
 .accept-button {
@@ -208,6 +207,7 @@ body {
     display: flex;
     width: 100%;
     height: 50%;
+    align-self: center;
 }
 
 .stage-name {
