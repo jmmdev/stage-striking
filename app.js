@@ -35,11 +35,6 @@ function initialize() {
         var acceptButton = document.getElementById('accept-button');
         acceptButton.addEventListener('click', () => {
             saveChanges();
-        })
-    
-        var cancelButton = document.getElementById('cancel-button');
-        cancelButton.addEventListener('click', () => {
-            closeEditMenu();
         })    
     }, 200);
 }
@@ -112,16 +107,27 @@ function saveChanges() {
 
 function toggleCps(element){
     var className = element.className;
+    var stages = document.getElementsByClassName('stage');
+    var starters = document.getElementsByClassName('stage starter');
+    var cp = document.getElementsByClassName('stage cp');
 
     if (className.includes('selected')) {
         element.className = className.replace(' selected', '')
         element.innerText = 'Show counterpicks';
+
+        for(let s of stages) {
+            s.style.maxWidth = starters.length - cp.length <= 9 ? '30%' : '23%';
+        }
 
         viewCps(false);
     }
     else {
         element.className = className + ' selected';
         element.innerText = 'Hide counterpicks';
+
+        for(let s of stages) {
+            s.style.maxWidth = starters.length + cp.length <= 9 ? '30%' : '23%';
+        }
 
         viewCps(true);
        
@@ -222,10 +228,7 @@ function populateStages() {
             var buttonsHTML = 
                 '<div class="stage-edit-buttons">' +
                     '<div id="accept-button" class="menu-button accept-button">' +
-                        'Save changes' +
-                    '</div>' +
-                    '<div id="cancel-button" class="menu-button cancel-button">' +
-                        'Cancel' +
+                        'Save and exit' +
                     '</div>' +
                 '</div>'
             
@@ -298,6 +301,24 @@ function setStages() {
     var cpToggle = document.getElementById('cp-toggle');
     
     viewCps(cpToggle.className.includes('selected'));
+
+    setGridSize();
+}
+
+function setGridSize() {
+    var disabled = getCookie('disabled').split(',').filter(element => element);
+    var starters = getCookie('starters').split(',').filter(element => element);
+    var cp = getCookie('cp').split(',').filter(element => element);
+    var cpToggle = document.getElementById('cp-toggle');
+
+    var stages = document.getElementsByClassName('stage');
+
+    for(let s of stages) {
+        if(disabled.length >= 2 || starters.length <= 9 && !cpToggle.className.includes('selected') || starters.length + cp.length <= 9 && cpToggle.className.includes('selected'))
+            s.style.maxWidth = '30%';
+        else
+            s.style.maxWidth = '23%';
+    }
 }
 
 function setRadioButtons() {
