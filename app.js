@@ -116,7 +116,7 @@ function toggleCps(element){
         element.innerText = 'Show counterpicks';
 
         for(let s of stages) {
-            s.style.maxWidth = starters.length - cp.length <= 9 ? '25%' : '20%';
+            s.style.maxWidth = starters.length - cp.length <= 9 ? '30%' : '23%';
         }
 
         viewCps(false);
@@ -126,7 +126,7 @@ function toggleCps(element){
         element.innerText = 'Hide counterpicks';
 
         for(let s of stages) {
-            s.style.maxWidth = starters.length + cp.length <= 9 ? '25%' : '20%';
+            s.style.maxWidth = starters.length + cp.length <= 9 ? '30%' : '23%';
         }
 
         viewCps(true);
@@ -315,9 +315,9 @@ function setGridSize() {
 
     for(let s of stages) {
         if(disabled.length >= 2 || starters.length <= 9 && !cpToggle.className.includes('selected') || starters.length + cp.length <= 9 && cpToggle.className.includes('selected'))
-            s.style.maxWidth = '25%';
+            s.style.maxWidth = '30%';
         else
-            s.style.maxWidth = '20%';
+            s.style.maxWidth = '23%';
     }
 }
 
