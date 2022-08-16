@@ -161,12 +161,10 @@ body {
 }
 
 .stage-edit-buttons {
-    width: 28%;
-    height: 20%;
-    position: absolute;
-    left: 98.75%;
-    top: 100%;
-    transform: translate(-100%, -100%);
+    width: 95%;
+    height: 75%;
+    justify-self: end;
+    align-self: flex-start;
 }
 
 .menu-button {
@@ -252,6 +250,7 @@ body {
     height: 100%;
     margin: 0;
     cursor: pointer;
+    user-select: none;
 }
 
 .radio-starter {

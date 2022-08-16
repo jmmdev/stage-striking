@@ -31,15 +31,17 @@ function initialize() {
     var menu = document.getElementById('stages-bg');
     menu.style.display = 'none';
 
-    var acceptButton = document.getElementById('accept-button');
-    acceptButton.addEventListener('click', () => {
-        saveChanges();
-    })
-
-    var cancelButton = document.getElementById('cancel-button');
-    cancelButton.addEventListener('click', () => {
-        closeEditMenu();
-    })
+    setTimeout(() => {
+        var acceptButton = document.getElementById('accept-button');
+        acceptButton.addEventListener('click', () => {
+            saveChanges();
+        })
+    
+        var cancelButton = document.getElementById('cancel-button');
+        cancelButton.addEventListener('click', () => {
+            closeEditMenu();
+        })    
+    }, 200);
 }
 
 function resizeWindow() {
@@ -216,6 +218,18 @@ function populateStages() {
 
             stageSettings.appendChild(dataDiv);
         }
+
+            var buttonsHTML = 
+                '<div class="stage-edit-buttons">' +
+                    '<div id="accept-button" class="menu-button accept-button">' +
+                        'Save changes' +
+                    '</div>' +
+                    '<div id="cancel-button" class="menu-button cancel-button">' +
+                        'Cancel' +
+                    '</div>' +
+                '</div>'
+            
+            stageSettings.innerHTML += buttonsHTML;
     });
 }
 
