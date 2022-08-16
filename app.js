@@ -1,52 +1,12 @@
 function initialize() {
     resizeWindow();
+    populateStages();
 
     window.addEventListener('resize', () => {
         resizeWindow();
     })
 
-    document.cookie = 'starters=1,2,3,4,5';
-    document.cookie = 'cp=6,7,8,9';
-
-    var stagesContainer = document.getElementsByClassName('stages-container');
-    var starters = getCookie('starters');
-    var cp = getCookie('cp');
-    
-    var starterList = starters.split(',')
-
-    for(let s of starterList) {
-        var stageDiv = document.createElement('div');
-        stageDiv.className = 'stage starter';
-
-        var stageImg = document.createElement('img');
-        stageImg.src = './assets/' + s + '.jpg';
-
-        stageDiv.appendChild(stageImg);
-
-        stagesContainer[0].appendChild(stageDiv);
-    }
-
-    var cpList = cp.split(',')
-
-    for(let s of cpList) {
-        var stageDiv = document.createElement('div');
-        stageDiv.className = 'stage cp';
-        
-        var stageImg = document.createElement('img');
-        stageImg.src = './assets/' + s + '.jpg';
-
-        stageDiv.appendChild(stageImg);
-
-        stagesContainer[0].appendChild(stageDiv);
-    }
-
-    var createdStages = document.getElementsByClassName('stage'); 
-
-    for(let s of createdStages) {
-        s.addEventListener('click', () => {
-            banStage(s);
-        })
-    }
+    setStages();
 
     var cpToggle = document.getElementById('cp-toggle');
     cpToggle.addEventListener('click', () => {
@@ -63,7 +23,7 @@ function initialize() {
         showEditMenu();
     })
 
-    var menu = document.getElementById('stage-edit-screen');
+    var menu = document.getElementById('stages-bg');
     menu.style.display = 'none';
 
     var acceptButton = document.getElementById('accept-button');
@@ -101,19 +61,40 @@ function resetBans() {
 }
 
 function showEditMenu() {
-    var menu = document.getElementById('stage-edit-screen');
+    var menu = document.getElementById('stages-bg');
     menu.style.display = 'flex';
 }
 
 function closeEditMenu() {
-    var menu = document.getElementById('stage-edit-screen');
+    var menu = document.getElementById('stages-bg');
     menu.style.display = 'none';
 }
 
 function saveChanges() {
-    // TODO
+    fetch('./files/stages.json').then(response => {
+        return response.json();
+    }).then(stages_data => {
+        var starters = '';
+        var cp = '';
 
-    closeEditMenu();
+        for(let data of stages_data) {
+            var value = document.querySelector('input[name="'+ data.index +'"]:checked').value;
+            
+            if(value === 'starter') {
+                starters += data.index + ',';
+            }
+
+            if(value === 'cp') {
+                cp += data.index + ',';
+            }
+        }
+
+        document.cookie = 'starters=' + starters;
+        document.cookie = 'cp=' + cp;
+
+        setStages();
+        closeEditMenu();
+    });
 }
 
 function toggleCps(element){
@@ -136,6 +117,135 @@ function toggleCps(element){
         for(let s of stages){
             s.style.display = 'flex';
         }
+    }
+}
+
+function populateStages() {
+    fetch('./files/stages.json').then(response => {
+        return response.json();
+    }).then(stages_data => {
+        var stageSettings = document.getElementById("stage-settings");
+
+        for(let s of stages_data) {
+            var dataDiv = document.createElement('div');
+            dataDiv.className = 'stage-data';
+
+                var nameDiv = document.createElement('div');
+                nameDiv.className = 'stage-name';
+                nameDiv.innerText = s.name;
+
+                dataDiv.appendChild(nameDiv);
+
+                var radioGroupDiv = document.createElement('div');
+                radioGroupDiv.className = 'radio-group';
+            
+                    var radioButtonDiv1 = document.createElement('div');
+                    radioButtonDiv1.className = 'radio-button';
+
+                        var label1 = document.createElement('label');
+                        label1.innerText = 'ST';
+                        radioButtonDiv1.appendChild(label1);
+
+                        var radio1 = document.createElement('input');
+                        radio1.type = 'radio';
+                        radio1.name = s.index;
+                        radio1.value = 'starter';
+                        radio1.className = 'state radio-starter';
+                        radioButtonDiv1.appendChild(radio1);
+                    
+                    radioGroupDiv.appendChild(radioButtonDiv1);
+
+                    var radioButtonDiv2 = document.createElement('div');
+                    radioButtonDiv2.className = 'radio-button';
+
+                        var label2 = document.createElement('label');
+                        label2.innerText = 'CP';
+                        radioButtonDiv2.appendChild(label2);
+
+                        var radio2 = document.createElement('input');
+                        radio2.type = 'radio';
+                        radio2.name = s.index;
+                        radio2.value = 'cp';
+                        radio2.className = 'state radio-cp';
+                        radioButtonDiv2.appendChild(radio2);
+                    
+                    radioGroupDiv.appendChild(radioButtonDiv2);
+
+                    var radioButtonDiv3 = document.createElement('div');
+                    radioButtonDiv3.className = 'radio-button';
+
+                        var label3 = document.createElement('label');
+                        label3.innerText = 'X';
+                        radioButtonDiv3.appendChild(label3);
+
+                        var radio3 = document.createElement('input');
+                        radio3.type = 'radio';
+                        radio3.name = s.index;
+                        radio3.value = 'disabled';
+                        radio3.className = 'state radio-disabled';
+                        radioButtonDiv3.appendChild(radio3);
+                
+                    radioGroupDiv.appendChild(radioButtonDiv3);
+                
+                dataDiv.appendChild(radioGroupDiv);
+
+            stageSettings.appendChild(dataDiv);
+        }
+    });
+}
+
+function setStages() {
+    var stagesContainer = document.getElementById('stages-container');
+    stagesContainer.innerHTML = '';
+
+    var starters = getCookie('starters');
+
+    if(starters === ""){
+        document.cookie = 'starters=0,1,2,3,4';
+        starters = getCookie('starters');
+    }
+    
+    var starterList = starters.split(',').filter(element => element);
+
+    for(let s of starterList) {
+        var stageDiv = document.createElement('div');
+        stageDiv.className = 'stage starter';
+
+        var stageImg = document.createElement('img');
+        stageImg.src = './assets/' + s + '.jpg';
+
+        stageDiv.appendChild(stageImg);
+
+        stagesContainer.appendChild(stageDiv);
+    }
+
+    var cp = getCookie('cp');
+
+    if(cp === ""){
+        document.cookie = 'cp=5,6,7,8';
+        cp = getCookie('cp');
+    }
+
+    var cpList = cp.split(',').filter(element => element);
+    
+    for(let s of cpList) {
+        var stageDiv = document.createElement('div');
+        stageDiv.className = 'stage cp';
+        
+        var stageImg = document.createElement('img');
+        stageImg.src = './assets/' + s + '.jpg';
+
+        stageDiv.appendChild(stageImg);
+
+        stagesContainer.appendChild(stageDiv);
+    }
+
+    var createdStages = document.getElementsByClassName('stage'); 
+
+    for(let s of createdStages) {
+        s.addEventListener('click', () => {
+            banStage(s);
+        })
     }
 }
 
